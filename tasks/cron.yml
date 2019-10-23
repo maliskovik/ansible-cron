@@ -1,0 +1,19 @@
+---
+- name: Create cronjobs
+  copy:
+    src: "{{ item }}"
+    dest: /etc/cron.d/
+    owner: root
+    group: root
+    mode: 0644
+  with_items: "{{ cron_cronjobs | default(omit) }}"
+  when: cron_cronjobs is defined
+- name: Add custom scripts
+  copy:
+    src: "{{ item }}"
+    dest: "{{ cron_scripts_dir }}"
+    mode: 0755
+    owner: root
+    group: root
+  with_items: "{{ cron_scripts | default(omit) }}"
+  when: cron_scripts is defined
