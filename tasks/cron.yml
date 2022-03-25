@@ -8,10 +8,18 @@
     mode: 0644
   with_items: "{{ cron_cronjobs | default(omit) }}"
   when: cron_cronjobs is defined
+
+- name: Create scripts dir
+  file:
+    path: "{{ cron_scripts_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
 - name: Add custom scripts
-  copy:
+  template:
     src: "{{ item }}"
-    dest: "{{ cron_scripts_dir }}"
+    dest: "{{ cron_scripts_dir }}/"
     mode: 0755
     owner: root
     group: root
